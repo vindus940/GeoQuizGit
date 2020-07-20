@@ -1,8 +1,10 @@
 package com.bignerdranch.android.geoquiz;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -64,6 +66,11 @@ public class MainActivity extends AppCompatActivity {
                 updateQuestion();
             }
         });
+        // Проверка экрана повернулся или нет мафака, если не повернулся то нулл,
+        // если повернулся то SaveInstanceState != null
+        if(savedInstanceState!=null){
+          mCurrentIndex=  savedInstanceState.getInt("position");
+        }
         updateQuestion();
 
         mPrewButton = (ImageButton) findViewById(R.id.back_button);
@@ -75,8 +82,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         }
+    //Сделали эту хуйню 20.07.2020 в 21:20, сохраняет Activity разворот окна ебать
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("position", mCurrentIndex);
+    }
 
-        @Override
+    @Override
         public void onStart() {
         super.onStart();
         Log.d(TAG, "onStart() called");
